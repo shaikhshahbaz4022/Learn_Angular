@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class MenuPageComponent implements OnInit {
   arr: any[] = JSON.parse(localStorage.getItem('cart') || '[]');
 
+  Foods: categories[] = [];
   filtereditems: any = [];
   constructor(
     private cdr: ChangeDetectorRef,
@@ -18,17 +19,17 @@ export class MenuPageComponent implements OnInit {
     private route: Router
   ) {}
 
-  Foods: categories[] = [];
-
   ngOnInit(): void {
     this.getAllMenus();
     this.filtereditems = this.Foods;
+    this.filterItem();
   }
 
   //get alldata from service
   getAllMenus() {
     this.menuservice.listMenu().subscribe((food) => {
       this.Foods = food.categories;
+      this.filterItem();
     });
   }
 
@@ -58,10 +59,16 @@ export class MenuPageComponent implements OnInit {
 
     if (this.selectedFood === 'alldata') {
       this.filtereditems = this.Foods;
+      console.log(this.filtereditems);
     } else {
       this.filtereditems = this.Foods.filter((ele) => {
         return ele.strCategory === this.selectedFood;
       });
+      console.log(this.filtereditems);
     }
+  }
+  logData() {
+    console.log('Selected Food:', this.selectedFood);
+    console.log('Filtered Items:', this.filtereditems);
   }
 }
