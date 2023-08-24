@@ -1,6 +1,7 @@
 import { categories } from './../menu-interface';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MenuService } from '../menu.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu-page',
@@ -8,15 +9,59 @@ import { MenuService } from '../menu.service';
   styleUrls: ['./menu-page.component.css'],
 })
 export class MenuPageComponent implements OnInit {
-  constructor(private menuservice: MenuService) {}
-  Foods: { categories: categories[] } = { categories: [] };
+  arr: any[] = JSON.parse(localStorage.getItem('cart') || '[]');
+
+  filtereditems: any = [];
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private menuservice: MenuService,
+    private route: Router
+  ) {}
+
+  Foods: categories[] = [];
 
   ngOnInit(): void {
     this.getAllMenus();
+    this.filtereditems = this.Foods;
   }
+
+  //get alldata from service
   getAllMenus() {
     this.menuservice.listMenu().subscribe((food) => {
-      return (this.Foods.categories = food.categories);
+      this.Foods = food.categories;
     });
+  }
+
+  //add to cart logic
+  AddToCart(ele: any) {
+    for (let i = 0; i < this.arr.length; i++) {
+      if (ele.idCategory == this.Foods[i].idCategory) {
+        alert('product Already In The Cart');
+        return;
+      }
+    }
+    let random = Math.floor(Math.random() * 100);
+    this.arr.push({ ...ele, quantity: 1, price: random });
+    localStorage.setItem('cart', JSON.stringify(this.arr));
+    alert('Product Added to Cart');
+  }
+  //for button
+  redirectToCart() {
+    this.route.navigate(['cart-page']);
+  }
+
+  //filter by category
+  selectedFood: string = 'alldata';
+
+  filterItem() {
+    this.getAllMenus();
+
+    if (this.selectedFood === 'alldata') {
+      this.filtereditems = this.Foods;
+    } else {
+      this.filtereditems = this.Foods.filter((ele) => {
+        return ele.strCategory === this.selectedFood;
+      });
+    }
   }
 }

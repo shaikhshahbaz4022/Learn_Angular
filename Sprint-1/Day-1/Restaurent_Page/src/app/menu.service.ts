@@ -11,4 +11,8 @@ export class MenuService {
   listMenu(): Observable<{ categories: categories[] }> {
     return this.http.get<{ categories: categories[] }>(this.appurl);
   }
+  getCartData() {
+    let arr: any = JSON.parse(localStorage.getItem('cart') || '[]');
+    return arr;
+  }
 }
