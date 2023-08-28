@@ -1,0 +1,20 @@
+<form (submit)="HandleSubmit()">
+  <label for="username">Username</label>
+  <input type="text" name="username" [(ngModel)]="username" />
+  <label for="title">Title</label>
+  <input type="text" [(ngModel)]="title" name="title" />
+  <input type="submit" value="Submit" />
+</form>
+<div>
+  <h1>See All Posts Here</h1>
+  <div *ngFor="let item of data">
+    <h3>ID: {{ item.id }}</h3>
+    <h2>{{ item.username }}</h2>
+    <h2>{{ item.title }}</h2>
+    <span>Likes: </span>
+    <button [disabled]="count == 0" (click)="decrese()">-</button>
+    <span>{{ count }}</span>
+    <button (click)="increaselike()">+</button>
+    <button (click)="deleteposts(item.id)">delete Posts</button>
+  </div>
+</div>
