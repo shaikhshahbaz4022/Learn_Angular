@@ -22,7 +22,6 @@ export class MenuPageComponent implements OnInit {
   ngOnInit(): void {
     this.getAllMenus();
     this.filtereditems = this.Foods;
-    this.filterItem();
   }
 
   //get alldata from service
@@ -55,8 +54,6 @@ export class MenuPageComponent implements OnInit {
   selectedFood: string = 'alldata';
 
   filterItem() {
-    this.getAllMenus();
-
     if (this.selectedFood === 'alldata') {
       this.filtereditems = this.Foods;
       console.log(this.filtereditems);
